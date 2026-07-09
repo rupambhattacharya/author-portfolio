@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Quiet Hours — Dan Rocca</title>
+  <meta name="description" content="Unlock 'The Quiet Hours' — an original track from Dan Rocca's debut novel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">Dan Rocca</a>
+    <ul class="nav-links">
+      <li><a href="index.html#book">The Book</a></li>
+      <li><a href="index.html#soundtrack">Soundtrack</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="song-page">
+  <div class="wrap">
+    <div class="song-card">
+      <span class="track-num">Track 01 · From the book</span>
+      <h1>The Quiet Hours</h1>
+
+      <div class="gate" id="gate">
+        <p class="sub">You found it. Drop your name and email and the song is yours — stream it here or take it with you.</p>
+        <form id="unlock-form">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required autocomplete="name" placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+          </div>
+          <button class="btn" type="submit">Unlock the song</button>
+          <p class="fineprint">We'll only use this to share news about Dan's books. No spam, ever.</p>
+        </form>
+      </div>
+
+      <div class="player" id="player">
+        <p class="thanks" id="thanks">Enjoy the track.</p>
+        <audio controls preload="metadata" src="assets/audio/song-1-the-quiet-hours.mp3"></audio>
+        <a class="btn" href="assets/audio/song-1-the-quiet-hours.mp3" download="Dan Rocca - The Quiet Hours.mp3">Download MP3</a>
+      </div>
+
+      <a class="back-link" href="index.html">← Back to danrocca.com</a>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   GOOGLE FORM SETUP (see README.md, step 3)
+   Replace the three placeholder values below with the ones
+   from your Google Form. Until then, the page still works —
+   it just won't record submissions.
+   ============================================================ */
+const GOOGLE_FORM = {
+  formId:     "YOUR_GOOGLE_FORM_ID",   // from the form URL
+  nameEntry:  "entry.1111111111",      // field ID for "Name"
+  emailEntry: "entry.2222222222",      // field ID for "Email"
+  songField:  "entry.3333333333"       // optional field ID for "Song" (or set to null)
+};
+const SONG_NAME = "The Quiet Hours";
+const STORAGE_KEY = "dr_unlocked_song1";
+
+const gate = document.getElementById("gate");
+const player = document.getElementById("player");
+
+function showPlayer(name) {
+  if (name) document.getElementById("thanks").textContent = `Thanks, ${name} — enjoy the track.`;
+  gate.classList.add("hidden");
+  player.classList.add("active");
+}
+
+// Returning visitor? Skip the form.
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if (saved) showPlayer(saved.name);
+} catch (e) {}
+
+document.getElementById("unlock-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+
+  // Send to Google Form (fire-and-forget; no-cors is expected)
+  if (GOOGLE_FORM.formId !== "YOUR_GOOGLE_FORM_ID") {
+    const data = new FormData();
+    data.append(GOOGLE_FORM.nameEntry, name);
+    data.append(GOOGLE_FORM.emailEntry, email);
+    if (GOOGLE_FORM.songField) data.append(GOOGLE_FORM.songField, SONG_NAME);
+    fetch(`https://docs.google.com/forms/d/e/${GOOGLE_FORM.formId}/formResponse`, {
+      method: "POST", mode: "no-cors", body: data
+    }).catch(() => {});
+  }
+
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, email })); } catch (e) {}
+  showPlayer(name);
+});
+</script>
+</body>
+</html>
