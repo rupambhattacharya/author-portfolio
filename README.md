@@ -1,25 +1,36 @@
 # Dan Rocca — Author Website
 
-Static site for GitHub Pages. Author info, upcoming book, and two QR-gated song download pages.
+Static site for GitHub Pages, live at **https://rupambhattacharya.github.io/danrocca-site**. Author info, upcoming book, and two QR-gated song download pages.
 
 ```
 index.html            Homepage (author, book, soundtrack)
 song1.html            "The Quiet Hours" — QR code 1 lands here
 song2.html            "Paper Cities"   — QR code 2 lands here
-CNAME                 Custom domain for GitHub Pages (edit if domain ≠ danrocca.com)
 assets/audio/         Dummy MP3s (replace with real songs, keep filenames)
 assets/qr/            Print-ready QR PNGs (1640px) + regenerate script
 assets/css/style.css  All styling
 ```
 
-## 1. GitHub Pages
+## 1. Deploy to GitHub Pages
 
-Deploy the site from your GitHub repository's Pages settings after the files are pushed.
+The repo already exists at `github.com/rupambhattacharya/danrocca-site`. Push any updates from this folder:
 
-## 2. Point your GoDaddy domain
+```
+cd dan-rocca-site
+git add -A && git commit -m "Update site"
+git push
+```
 
-1. In repo **Settings → Pages → Custom domain**, enter your domain (e.g. `danrocca.com`) and save. GitHub reads the `CNAME` file automatically — edit it if your domain differs.
-2. In **GoDaddy → My Products → DNS** for the domain, add:
+Then enable Pages (one-time): repo → **Settings → Pages** → Source: `Deploy from a branch`, Branch: `main` / `(root)` → Save. Site goes live at `https://rupambhattacharya.github.io/danrocca-site/` within a minute or two.
+
+To move to `danrocca.github.io` later: create a GitHub account named **danrocca**, create a repo in it named exactly `danrocca.github.io`, push the same files, and regenerate the QR codes (step 4).
+
+Note: do NOT add a CNAME file or custom domain setting — that redirects the github.io URL away. Only add it if you later buy a domain (see below).
+
+## 2. (Later, optional) Custom GoDaddy domain
+
+1. Repo **Settings → Pages → Custom domain** → enter the domain → Save.
+2. In **GoDaddy → My Products → DNS**, add:
 
    | Type  | Name | Value              |
    |-------|------|--------------------|
@@ -27,10 +38,11 @@ Deploy the site from your GitHub repository's Pages settings after the files are
    | A     | @    | 185.199.109.153    |
    | A     | @    | 185.199.110.153    |
    | A     | @    | 185.199.111.153    |
-   | CNAME | www  | rupambhattacharya.github.io |
+   | CNAME | www  | danrocca.github.io |
 
    Delete any conflicting GoDaddy "parked" A records for `@`.
-3. Back in GitHub Pages settings, tick **Enforce HTTPS** once DNS propagates (minutes to ~1 hour usually).
+3. Tick **Enforce HTTPS** once DNS propagates.
+4. **Regenerate and reprint the QR codes** (step 4 below) — though the old github.io links keep redirecting to the new domain, so already-printed books keep working.
 
 ## 3. Hook up the Google Form (email capture)
 
@@ -53,14 +65,14 @@ Until you do this, the pages still work — visitors can unlock and download the
 
 `assets/qr/qr-song1-print.png` and `qr-song2-print.png` are 1640×1640 px with high error correction — sharp at any book print size (keep ≥ 2 cm on the page). They point to:
 
-- `https://danrocca.com/song1.html`
-- `https://danrocca.com/song2.html`
+- `https://rupambhattacharya.github.io/danrocca-site/song1.html`
+- `https://rupambhattacharya.github.io/danrocca-site/song2.html`
 
-**Different domain?** Regenerate before printing:
+**Domain changed?** Regenerate before printing:
 ```
 cd assets/qr
 pip install qrcode pillow
-python regenerate_qr.py your-real-domain.com
+python regenerate_qr.py rupambhattacharya.github.io/danrocca-site
 ```
 Test-scan both codes with a phone after the site is live, before sending to the printer.
 
