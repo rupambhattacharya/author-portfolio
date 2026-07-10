@@ -28,7 +28,7 @@
       <h1>The Sun &amp; Me; After the Rain</h1>
 
       <div class="gate" id="gate">
-        <p class="sub">You found it. Enter your name, email, and the book access code to unlock the song.</p>
+        <p class="sub">You found it. Enter your name and email to unlock the song.</p>
         <form id="unlock-form">
           <div class="field">
             <label for="name">Name</label>
@@ -37,10 +37,6 @@
           <div class="field">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
-          </div>
-          <div class="field">
-            <label for="access-code">Access code</label>
-            <input type="text" id="access-code" name="access-code" required autocomplete="off" placeholder="Enter the code from your book">
           </div>
           <button class="btn" type="submit">Unlock the song</button>
           <p class="fineprint" id="access-message">This track is reserved for readers of the book. Your name and email will be sent to the Google Form and Google Sheet.</p>
@@ -74,7 +70,6 @@ const GOOGLE_FORM = {
 const SONG_NAME = "The Sun & Me; After the Rain";
 const STORAGE_KEY = "dr_unlocked_song2";
 const ACCESS_STORAGE_KEY = "dr_book_access";
-const ACCESS_CODE = "shadowstills2026";
 
 const gate = document.getElementById("gate");
 const player = document.getElementById("player");
@@ -83,10 +78,6 @@ function showPlayer(name) {
   if (name) document.getElementById("thanks").textContent = `Thanks, ${name} — enjoy the track.`;
   gate.classList.add("hidden");
   player.classList.add("active");
-}
-
-function isValidAccessCode(code) {
-  return code.trim().toLowerCase() === ACCESS_CODE.toLowerCase();
 }
 
 function grantAccess(name, email) {
@@ -111,8 +102,7 @@ function submitToGoogleForm(name, email) {
 try {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
   const granted = localStorage.getItem(ACCESS_STORAGE_KEY) === "granted";
-  const accessCodeFromUrl = new URLSearchParams(window.location.search).get("code");
-  if (saved || granted || (accessCodeFromUrl && isValidAccessCode(accessCodeFromUrl))) {
+  if (saved || granted) {
     grantAccess(saved?.name || "", saved?.email || "");
   }
 } catch (e) {}
@@ -121,14 +111,7 @@ document.getElementById("unlock-form").addEventListener("submit", function (e) {
   e.preventDefault();
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
-  const accessCode = document.getElementById("access-code").value.trim();
   const accessMessage = document.getElementById("access-message");
-
-  if (!isValidAccessCode(accessCode)) {
-    accessMessage.textContent = "That code doesn’t match. Please enter the access code from your book.";
-    accessMessage.style.color = "var(--accent)";
-    return;
-  }
 
   submitToGoogleForm(name, email);
   grantAccess(name, email);
