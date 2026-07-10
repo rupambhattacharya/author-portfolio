@@ -1,11 +1,11 @@
-# Dan Rocca — Author Website
+# Elevated Lighthouse — Publishing Website
 
-Static site for GitHub Pages, live at **https://rupambhattacharya.github.io/danrocca-site**. Author info, upcoming book, and two QR-gated song download pages.
+Static site for GitHub Pages, live at **https://elevatedlighthouse.com** (also https://rupambhattacharya.github.io/danrocca-site/ until DNS is set). Elevated Lighthouse LLC publisher page, D.T. Rocca author/book info, and two QR-gated song download pages.
 
 ```
 index.html            Homepage (author, book, soundtrack)
-song1.html            "The Quiet Hours" — QR code 1 lands here
-song2.html            "Paper Cities"   — QR code 2 lands here
+song1.html            "The Sun & Me; High Noon" — QR code 1 lands here
+song2.html            "The Sun & Me; After the Rain" — QR code 2 lands here
 assets/audio/         Dummy MP3s (replace with real songs, keep filenames)
 assets/qr/            Print-ready QR PNGs (1640px) + regenerate script
 assets/css/style.css  All styling
@@ -21,15 +21,17 @@ git add -A && git commit -m "Update site"
 git push
 ```
 
-Then enable Pages (one-time): repo → **Settings → Pages** → Source: `Deploy from a branch`, Branch: `main` / `(root)` → Save. Site goes live at `https://rupambhattacharya.github.io/danrocca-site/` within a minute or two.
+Then enable Pages (one-time): repo → **Settings → Pages** → Source: `Deploy from a branch`, Branch: `main` / `(root)` → Save. Site goes live within a minute or two.
 
-To move to `danrocca.github.io` later: create a GitHub account named **danrocca**, create a repo in it named exactly `danrocca.github.io`, push the same files, and regenerate the QR codes (step 4).
+
 
 Note: do NOT add a CNAME file or custom domain setting — that redirects the github.io URL away. Only add it if you later buy a domain (see below).
 
-## 2. (Later, optional) Custom GoDaddy domain
+## 2. Point elevatedlighthouse.com (GoDaddy) at the site
 
-1. Repo **Settings → Pages → Custom domain** → enter the domain → Save.
+The repo now contains a `CNAME` file with `elevatedlighthouse.com`, so GitHub redirects the github.io URL to that domain. Until DNS is configured, the site is unreachable — so do this right after buying the domain:
+
+1. Repo **Settings → Pages → Custom domain** → confirm it shows `elevatedlighthouse.com` → Save.
 2. In **GoDaddy → My Products → DNS**, add:
 
    | Type  | Name | Value              |
@@ -38,11 +40,11 @@ Note: do NOT add a CNAME file or custom domain setting — that redirects the gi
    | A     | @    | 185.199.109.153    |
    | A     | @    | 185.199.110.153    |
    | A     | @    | 185.199.111.153    |
-   | CNAME | www  | danrocca.github.io |
+   | CNAME | www  | rupambhattacharya.github.io |
 
    Delete any conflicting GoDaddy "parked" A records for `@`.
 3. Tick **Enforce HTTPS** once DNS propagates.
-4. **Regenerate and reprint the QR codes** (step 4 below) — though the old github.io links keep redirecting to the new domain, so already-printed books keep working.
+4. Not bought the domain yet and need the site up now? Delete the `CNAME` file from the repo — the site then serves at the github.io URL (but regenerate the QR codes before printing, step 4).
 
 ## 3. Hook up the Google Form (email capture)
 
@@ -65,22 +67,21 @@ Until you do this, the pages still work — visitors can unlock and download the
 
 `assets/qr/qr-song1-print.png` and `qr-song2-print.png` are 1640×1640 px with high error correction — sharp at any book print size (keep ≥ 2 cm on the page). They point to:
 
-- `https://rupambhattacharya.github.io/danrocca-site/song1.html`
-- `https://rupambhattacharya.github.io/danrocca-site/song2.html`
+- `https://elevatedlighthouse.com/song1.html`
+- `https://elevatedlighthouse.com/song2.html`
 
 **Domain changed?** Regenerate before printing:
 ```
 cd assets/qr
 pip install qrcode pillow
-python regenerate_qr.py rupambhattacharya.github.io/danrocca-site
+python regenerate_qr.py elevatedlighthouse.com
 ```
 Test-scan both codes with a phone after the site is live, before sending to the printer.
 
 ## 5. Replace the placeholders
 
-- Author bio and hobbies: `index.html`, About section (marked `[Placeholder ...]`)
-- Author photo: add `assets/img/dan.jpg`, then swap the `.portrait` div for `<img src="assets/img/dan.jpg" alt="Dan Rocca">`
-- Book title, blurb, genre, cover: `index.html`, Book section (the cover is pure CSS — replace with a real cover image when ready)
-- Song titles/descriptions: `index.html` + both song pages
+- Book synopsis: `index.html`, Book section (marked `[Placeholder blurb]`)
+- Author image: add `assets/img/dan.jpg` (from the graphic artist), then swap the `.portrait` div for `<img src="assets/img/dan.jpg" alt="D.T. Rocca">`
+- Book cover: pure CSS placeholder in `index.html` — replace with the real cover image when ready
 - Real MP3s: drop into `assets/audio/` with the same filenames
 - Social links: footer of `index.html`

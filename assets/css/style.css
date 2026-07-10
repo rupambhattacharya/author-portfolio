@@ -125,8 +125,12 @@ h2 {
 }
 .book-cover:hover { transform: rotate(0deg) scale(1.02); }
 .book-cover .bc-title {
-  font-family: var(--serif); font-size: 1.9rem; line-height: 1.12;
-  font-weight: 600; letter-spacing: -0.01em;
+  font-family: var(--serif); font-size: 1.45rem; line-height: 1.18;
+  font-weight: 600; letter-spacing: -0.01em; display: block;
+}
+.book-cover .bc-sub {
+  display: block; font-family: var(--serif); font-style: italic;
+  font-size: 0.9rem; margin-top: 12px; opacity: 0.85; line-height: 1.35;
 }
 .book-cover .bc-author {
   font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase;
