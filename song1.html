@@ -43,7 +43,7 @@
             <input type="text" id="access-code" name="access-code" required autocomplete="off" placeholder="Enter the code from your book">
           </div>
           <button class="btn" type="submit">Unlock the song</button>
-          <p class="fineprint" id="access-message">This track is reserved for readers of the book. Enter the code printed in the book to unlock it.</p>
+          <p class="fineprint" id="access-message">This track is reserved for readers of the book. Enter the code printed in the book to unlock it. If you connect a Google Form, entries will be saved to your Google Sheet.</p>
         </form>
       </div>
 
@@ -66,10 +66,10 @@
    it just won't record submissions.
    ============================================================ */
 const GOOGLE_FORM = {
-  formId:     "YOUR_GOOGLE_FORM_ID",   // from the form URL
-  nameEntry:  "entry.1111111111",      // field ID for "Name"
-  emailEntry: "entry.2222222222",      // field ID for "Email"
-  songField:  "entry.3333333333"       // optional field ID for "Song" (or set to null)
+  formId:     "",   // paste your Google Form ID here
+  nameEntry:  "",   // field ID for "Name"
+  emailEntry: "",   // field ID for "Email"
+  songField:  ""    // optional field ID for "Song" (or set to "")
 };
 const SONG_NAME = "The Sun & Me; High Noon";
 const STORAGE_KEY = "dr_unlocked_song1";
@@ -95,6 +95,19 @@ function grantAccess(name, email) {
   showPlayer(name);
 }
 
+function submitToGoogleForm(name, email) {
+  if (!GOOGLE_FORM.formId || !GOOGLE_FORM.nameEntry || !GOOGLE_FORM.emailEntry) return;
+
+  const data = new FormData();
+  data.append(GOOGLE_FORM.nameEntry, name);
+  data.append(GOOGLE_FORM.emailEntry, email);
+  if (GOOGLE_FORM.songField) data.append(GOOGLE_FORM.songField, SONG_NAME);
+
+  fetch(`https://docs.google.com/forms/d/e/${GOOGLE_FORM.formId}/formResponse`, {
+    method: "POST", mode: "no-cors", body: data
+  }).catch(() => {});
+}
+
 try {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
   const granted = localStorage.getItem(ACCESS_STORAGE_KEY) === "granted";
@@ -117,16 +130,7 @@ document.getElementById("unlock-form").addEventListener("submit", function (e) {
     return;
   }
 
-  if (GOOGLE_FORM.formId !== "YOUR_GOOGLE_FORM_ID") {
-    const data = new FormData();
-    data.append(GOOGLE_FORM.nameEntry, name);
-    data.append(GOOGLE_FORM.emailEntry, email);
-    if (GOOGLE_FORM.songField) data.append(GOOGLE_FORM.songField, SONG_NAME);
-    fetch(`https://docs.google.com/forms/d/e/${GOOGLE_FORM.formId}/formResponse`, {
-      method: "POST", mode: "no-cors", body: data
-    }).catch(() => {});
-  }
-
+  submitToGoogleForm(name, email);
   grantAccess(name, email);
 });
 </script>
