@@ -10,3 +10,4 @@ All notable changes to the Elevated Lighthouse site are logged here, newest firs
 - Updated the homepage soundtrack section to list all six songs across two groups, updated copy from "two-song" to "six-song" soundtrack, and added a "Vote for your favorite" link to the new voting page.
 - Regenerated all QR codes with descriptive filenames (e.g. `qr-song3-white-rose-female-print.png` instead of `qr-song3-print.png`) and added QR codes for the 4 new song pages and the vote page.
 - Deployed the Apps Script vote backend and wired `vote.html` to it. Voting is now live: one vote per IP, two running counters. Also patched a formula-injection risk — the backend now whitelists the client-supplied `ip` value to look like a real IP address before writing it into the Sheet, rather than trusting it as-is.
+- Repointed `vote.html` at a fresh Apps Script deployment URL after redeploying with the formula-injection fix.
