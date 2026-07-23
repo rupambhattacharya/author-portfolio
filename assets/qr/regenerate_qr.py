@@ -2,7 +2,7 @@
 Usage: pip install qrcode pillow && python regenerate_qr.py yourdomain.com"""
 import sys, qrcode
 
-domain = sys.argv[1] if len(sys.argv) > 1 else "elevatedlighthouse.com"
+domain = sys.argv[1] if len(sys.argv) > 1 else "www.elevatedlighthouse.com"
 
 # (page slug -> URL path, output filename slug -> qr-<slug>-print.png)
 PAGES = [
