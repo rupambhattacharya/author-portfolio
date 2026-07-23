@@ -40,9 +40,20 @@ function ipAlreadyVoted(ip) {
   return false;
 }
 
+function sanitizeIp(raw) {
+  // Whitelist only things shaped like an IPv4 or IPv6 address before writing
+  // to the Sheet. Anything else (e.g. a formula-injection payload starting
+  // with =, +, -, @) is discarded in favor of 'unknown'.
+  if (typeof raw !== 'string') return 'unknown';
+  const IPV4 = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+  const IPV6 = /^[0-9a-fA-F:]+$/;
+  if (IPV4.test(raw) || (raw.indexOf(':') !== -1 && IPV6.test(raw))) return raw;
+  return 'unknown';
+}
+
 function handleVote(e) {
   const song = e.parameter.song;
-  const ip = e.parameter.ip || 'unknown';
+  const ip = sanitizeIp(e.parameter.ip);
 
   if (ALLOWED_SONGS.indexOf(song) === -1) {
     return jsonResponse({ error: 'invalid song' });
