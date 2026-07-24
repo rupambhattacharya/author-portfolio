@@ -32,16 +32,16 @@
         <form id="vote-form">
           <div class="vote-options">
             <label class="vote-option">
-              <input type="radio" name="song" value="highNoon" required>
-              <span>The Sun &amp; Me; High Noon</span>
+              <input type="radio" name="song" value="afterTheRain" required>
+              <span>The Sun &amp; Me; After the Rain</span>
             </label>
             <label class="vote-option">
-              <input type="radio" name="song" value="afterTheRain">
-              <span>The Sun &amp; Me; After the Rain</span>
+              <input type="radio" name="song" value="highNoon">
+              <span>The Sun &amp; Me; High Noon</span>
             </label>
           </div>
           <button class="btn" type="submit" id="vote-btn">Vote</button>
-          <p class="fineprint" id="vote-status">One vote per reader.</p>
+          <p class="fineprint" id="vote-status">Your vote counts; but only once!</p>
         </form>
       </div>
 
@@ -49,14 +49,14 @@
         <p class="thanks" id="result-message">Thanks for voting.</p>
         <div class="counts" id="counts">
           <div class="count-row">
-            <span class="count-label">The Sun &amp; Me; High Noon</span>
-            <div class="count-bar"><div class="count-fill" id="bar-highNoon"></div></div>
-            <span class="count-value" id="count-highNoon">0 votes</span>
-          </div>
-          <div class="count-row">
             <span class="count-label">The Sun &amp; Me; After the Rain</span>
             <div class="count-bar"><div class="count-fill" id="bar-afterTheRain"></div></div>
             <span class="count-value" id="count-afterTheRain">0 votes</span>
+          </div>
+          <div class="count-row">
+            <span class="count-label">The Sun &amp; Me; High Noon</span>
+            <div class="count-bar"><div class="count-fill" id="bar-highNoon"></div></div>
+            <span class="count-value" id="count-highNoon">0 votes</span>
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@ const resultMessage = document.getElementById("result-message");
 
 function renderCounts(counts) {
   const total = (counts.highNoon || 0) + (counts.afterTheRain || 0);
-  ["highNoon", "afterTheRain"].forEach(function (key) {
+  ["afterTheRain", "highNoon"].forEach(function (key) {
     const value = counts[key] || 0;
     const pct = total ? Math.round((value / total) * 100) : 0;
     document.getElementById("count-" + key).textContent = value + (value === 1 ? " vote" : " votes");
